@@ -89,3 +89,19 @@ def fisher_info(params, X, y):
     nI[p, :p] = d2l_dbeta_dphi
     nI[p, p] = d2l_dphi2
     return -1 * nI
+
+def fit_regression(X, y):
+    n, p = X.shape
+    y = np.clip(y, 1e-12, 1 - 1e-12)
+
+    # add intercept to X
+    X = np.hstack([np.ones((n, 1)), X]) 
+    n, p = X.shape
+    
+    # Initial parameter guess
+    initial_beta = np.zeros(p)
+    initial_phi = 1.0
+    initial_params = np.concatenate([initial_beta, [initial_phi]])
+
+    result = minimize(log_likelihood, initial_params, args=(X, y), method='BFGS', jac=score)
+    return result
