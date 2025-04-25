@@ -33,7 +33,7 @@ def score(params, X, y):
     term = np.log(y / (1 - y)) + digamma((1 - mu) * phi) - digamma(mu * phi)
     score_beta = phi * (X.T @ (term * mu * (1 - mu)))
     
-    return -np.concatenate([score_beta, [score_phi]])
+    return np.concatenate([score_beta, [score_phi]])
 
 def hessian(params, X, y):
     beta = params[:-1]
@@ -43,8 +43,8 @@ def hessian(params, X, y):
     
     # 2nd derivative w.r.t. phi
     d2l_dphi2 = (n * polygamma(1, phi) - 
-                 np.sum(mu**2 * polygamma(1, mu * phi)) - 
-                 np.sum((1 - mu)**2 * polygamma(1, (1 - mu) * phi)))
+                 np.sum((mu**2) * polygamma(1, mu * phi)) - 
+                 np.sum(((1 - mu)**2) * polygamma(1, (1 - mu) * phi)))
     
     # 2nd derivative w.r.t. beta (matrix)
     d1 = phi * mu * (1 - mu) * (polygamma(1, (1 - mu) * phi) + polygamma(1, mu * phi))
@@ -54,13 +54,38 @@ def hessian(params, X, y):
     
     # Mixed derivative w.r.t. beta and phi
     score_beta = phi * (X.T @ (term * mu * (1 - mu)))
-    d2l_dbeta_dphi = (score_beta / phi + 
+    d2l_dbeta_dphi = ((score_beta / phi) + 
                       phi * (X.T @ (mu * (1 - mu) * (polygamma(1, (1 - mu) * phi) * (1 - mu) - 
                                               polygamma(1, mu * phi) * mu))))
     
-    J = np.zeros((p + 1, p + 1))
-    J[:p, :p] = -d2l_dbeta_dbeta
-    J[:p, p] = -d2l_dbeta_dphi
-    J[p, :p] = -d2l_dbeta_dphi 
-    J[p, p] = -d2l_dphi2          
-    return J
+    nJ = np.zeros((p + 1, p + 1))
+    nJ[:p, :p] = d2l_dbeta_dbeta
+    nJ[:p, p] = d2l_dbeta_dphi
+    nJ[p, :p] = d2l_dbeta_dphi
+    nJ[p, p] = d2l_dphi2
+    return nJ
+
+def fisher_info(params, X, y):
+    beta = params[:-1]
+    phi = params[-1]
+    mu = get_mu(X, beta)
+    n, p = X.shape
+    
+    # 2nd derivative w.r.t. phi
+    d2l_dphi2 = (n * polygamma(1, phi) - 
+                 np.sum((mu**2) * polygamma(1, mu * phi)) - 
+                 np.sum(((1 - mu)**2) * polygamma(1, (1 - mu) * phi)))
+    
+    # 2nd derivative w.r.t. beta (matrix)
+    d1 = phi * mu * (1 - mu) * (polygamma(1, (1 - mu) * phi) + polygamma(1, mu * phi))
+    d2l_dbeta_dbeta = -phi * (X.T @ ((mu * (1 - mu) * d1)[:, None] * X))
+    
+    # Mixed derivative w.r.t. beta and phi
+    d2l_dbeta_dphi = phi * (X.T @ (mu * (1 - mu) * (polygamma(1, (1 - mu) * phi) * (1 - mu) - polygamma(1, mu * phi) * mu)))
+    
+    nI = np.zeros((p + 1, p + 1))
+    nI[:p, :p] = d2l_dbeta_dbeta
+    nI[:p, p] = d2l_dbeta_dphi
+    nI[p, :p] = d2l_dbeta_dphi
+    nI[p, p] = d2l_dphi2
+    return -1 * nI
