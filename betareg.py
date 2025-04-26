@@ -144,7 +144,7 @@ def fit_regression(X, y):
                 
             params = propParams
 
-        if i % 50 == 0:
+        if j % 30 == 0:
             stopBeta = False
 
         # Calculate gradient for phi
