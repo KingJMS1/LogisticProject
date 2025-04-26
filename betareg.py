@@ -1,5 +1,6 @@
 import numpy as np
-from scipy.special import gamma, digamma, polygamma
+from scipy.special import gamma, digamma, polygamma, loggamma
+import scipy.stats as stats
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
@@ -12,9 +13,9 @@ def log_likelihood(params, X, y):
     phi = params[-1]    # precision parameter
     mu = get_mu(X, beta)
     
-    ll = (len(y) * np.log(gamma(phi)) - 
-          np.sum(np.log(gamma(mu * phi))) - 
-          np.sum(np.log(gamma((1 - mu) * phi))) + 
+    ll = (len(y) * (loggamma(phi)) - 
+          np.sum(loggamma(mu * phi)) - 
+          np.sum(loggamma((1 - mu) * phi)) + 
           np.sum((mu * phi - 1) * np.log(y)) + 
           np.sum(((1 - mu) * phi - 1) * np.log(1 - y)))
     return ll
@@ -91,17 +92,101 @@ def fisher_info(params, X, y):
     return -1 * nI
 
 def fit_regression(X, y):
-    n, p = X.shape
     y = np.clip(y, 1e-12, 1 - 1e-12)
 
-    # add intercept to X
-    X = np.hstack([np.ones((n, 1)), X]) 
+    # Support null model
+    if X is not None:
+        n, p = X.shape
+
+        # add intercept to X
+        X = np.hstack([np.ones((n, 1)), X]) 
+    else:
+        n = len(y)
+        X = np.ones((n, 1))
+
     n, p = X.shape
     
     # Initial parameter guess
-    initial_beta = np.zeros(p)
-    initial_phi = 1.0
-    initial_params = np.concatenate([initial_beta, [initial_phi]])
+    beta = np.zeros(p)
+    phi = 1
+    params = np.concatenate([beta, [phi]])
+    j = 0
+    stopBeta = False
 
-    result = minimize(log_likelihood, initial_params, args=(X, y), method='BFGS', jac=score)
-    return result
+    old_lik = -1e99
+    curr_lik = log_likelihood(params, X, y)
+    print(curr_lik)
+    while True:
+        j += 1
+        # Check for convergence
+        if curr_lik < old_lik + 1e-4:
+            break
+        old_lik = curr_lik
+
+        if not stopBeta:
+            # Calculate gradient for beta
+            grad = score(params, X, y)
+            grad[-1] = 0
+            lr = 1e-3
+
+            propParams = params + lr * grad
+            curr_lik = log_likelihood(propParams, X, y)
+
+            i = 0
+            while curr_lik < old_lik + 1e-6:
+                lr *= 0.8
+                propParams = params + lr * grad
+                curr_lik = log_likelihood(propParams, X, y)
+                i += 1
+                if i > 80:
+                    stopBeta = True
+                    break
+                
+            params = propParams
+
+        if i % 50 == 0:
+            stopBeta = False
+
+        # Calculate gradient for phi
+        grad = score(params, X, y)
+        grad[:p] = 0
+        lr = 1
+
+        propParams = params + lr * grad
+        curr_lik = log_likelihood(propParams, X, y)
+
+        i = 0
+        while (propParams[-1] < 1e-8) or (curr_lik < old_lik + 1e-6):
+            lr *= 0.6
+            propParams = params + lr * grad
+            curr_lik = log_likelihood(propParams, X, y)
+            i += 1
+            if i > 500:
+                break
+
+        params = propParams
+
+        if j % 100 == 0:
+            print(params, curr_lik)
+
+    return params, X, y, fisher_info(params, X, y)
+
+def summary(params, names, X, y, I):
+    n, p = X.shape
+    print("Beta Regression Summary")
+    wald = params[:p] / np.sqrt(np.diag(np.linalg.inv(I[:p,:p])))
+    pval = 1 - stats.chi2(1).cdf(wald ** 2)
+
+    names = ["Intercept"] + names
+
+    w1 = max([len(x) + 3 for x in names] + [len("Coefficient") + 3])
+    print(f"{'Coefficient':<{w1}}{'Value':<8}{'Wald':<8}{'P-value':<8}")
+    for i, name in enumerate(names):
+        print(f"{name:<{w1}}{params[i]:<8.2f}{wald[i]:<8.2f}{pval[i]:<8.2f}")
+    print()
+    print(f"Log-Likelihood:   {log_likelihood(params, X, y):.2f}")
+
+def lr_test(params1, params2, X, y):
+    k = np.abs(len(params2) - len(params1))
+    stat = 2 * np.abs(log_likelihood(params2, X, y) - log_likelihood(params1, X, y))
+    return 1 - stats.chi2(k).cdf(stat)
