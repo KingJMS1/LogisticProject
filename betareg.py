@@ -191,7 +191,7 @@ def summary(params, names, X, y, I):
     print()
     print(f"Log-Likelihood:   {log_likelihood(params, X, y):.2f}")
 
-def lr_test(params1, params2, X, y):
+def lr_test(params1, params2, X1, X2, y):
     k = np.abs(len(params2) - len(params1))
-    stat = 2 * np.abs(log_likelihood(params2, X, y) - log_likelihood(params1, X, y))
+    stat = 2 * np.abs(log_likelihood(params2, X1, y) - log_likelihood(params1, X2, y))
     return 1 - stats.chi2(k).cdf(stat)
