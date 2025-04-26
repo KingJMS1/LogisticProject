@@ -6,7 +6,7 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 def get_mu(X, beta):
-    return np.clip(X @ beta, 1e-12, 1 - 1e-12)
+    return np.clip(sigmoid(X @ beta), 1e-12, 1 - 1e-12)
 
 def log_likelihood(params, X, y):
     beta = params[:-1]  # regression coefficients
@@ -127,7 +127,7 @@ def fit_regression(X, y):
             # Calculate gradient for beta
             grad = score(params, X, y)
             grad[-1] = 0
-            lr = 1e-3
+            lr = 1e-2
 
             propParams = params + lr * grad
             curr_lik = log_likelihood(propParams, X, y)
@@ -138,7 +138,7 @@ def fit_regression(X, y):
                 propParams = params + lr * grad
                 curr_lik = log_likelihood(propParams, X, y)
                 i += 1
-                if i > 80:
+                if i > 120:
                     stopBeta = True
                     break
                 
@@ -170,6 +170,11 @@ def fit_regression(X, y):
             print(params, curr_lik)
 
     return params, X, y, fisher_info(params, X, y)
+
+def std_resids(params, X, y):
+    n, p = X.shape
+    mu = get_mu(X, params[:p])
+    return (y - mu) / (np.sqrt((mu) *  (1 - mu) / (1 + params[p])))
 
 def summary(params, names, X, y, I):
     n, p = X.shape
