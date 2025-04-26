@@ -1,0 +1,232 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:z="http://www.zotero.org/namespaces/export#"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:bib="http://purl.org/net/biblio#"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/"
+ xmlns:vcard="http://nwalsh.com/rdf/vCard#"
+ xmlns:link="http://purl.org/rss/1.0/modules/link/">
+    <bib:Article rdf:about="http://www.tandfonline.com/doi/abs/10.1080/0266476042000214501">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:0266-4763,%201360-0532"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ferrari</foaf:surname>
+                        <foaf:givenName>Silvia</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Cribari-Neto</foaf:surname>
+                        <foaf:givenName>Francisco</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Beta Regression for Modelling Rates and Proportions</dc:title>
+        <dc:date>08/2004</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.tandfonline.com/doi/abs/10.1080/0266476042000214501</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2025-04-12 16:18:31</dcterms:dateSubmitted>
+        <bib:pages>799-815</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:0266-4763,%201360-0532">
+        <prism:volume>31</prism:volume>
+        <dc:title>Journal of Applied Statistics</dc:title>
+        <dc:identifier>DOI 10.1080/0266476042000214501</dc:identifier>
+        <prism:number>7</prism:number>
+        <dcterms:alternative>Journal of Applied Statistics</dcterms:alternative>
+        <dc:identifier>ISSN 0266-4763, 1360-0532</dc:identifier>
+    </bib:Journal>
+    <bib:BookSection rdf:about="urn:isbn:978-1-4419-0117-0%20978-1-4419-0118-7">
+        <z:itemType>bookSection</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Book>
+                <dc:identifier>ISBN 978-1-4419-0117-0 978-1-4419-0118-7</dc:identifier>
+                <dc:title>Generalized Linear Models With Examples in R</dc:title>
+            </bib:Book>
+        </dcterms:isPartOf>
+        <dc:publisher>
+            <foaf:Organization>
+                <vcard:adr>
+                    <vcard:Address>
+                       <vcard:locality>New York, NY</vcard:locality>
+                    </vcard:Address>
+                </vcard:adr>
+                <foaf:name>Springer New York</foaf:name>
+            </foaf:Organization>
+        </dc:publisher>
+        <z:bookAuthors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Dunn</foaf:surname>
+                        <foaf:givenName>Peter K.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Smyth</foaf:surname>
+                        <foaf:givenName>Gordon K.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </z:bookAuthors>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Dunn</foaf:surname>
+                        <foaf:givenName>Peter K.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Smyth</foaf:surname>
+                        <foaf:givenName>Gordon K.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Chapter 7: Generalized Linear Models: Inference</dc:title>
+        <dc:date>2018</dc:date>
+        <z:shortTitle>Chapter 7</z:shortTitle>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://link.springer.com/10.1007/978-1-4419-0118-7_7</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2025-04-25 01:30:20</dcterms:dateSubmitted>
+        <dc:description>Series Title: Springer Texts in Statistics
+DOI: 10.1007/978-1-4419-0118-7_7</dc:description>
+        <bib:pages>265-296</bib:pages>
+    </bib:BookSection>
+    <bib:Document rdf:about="https://fred.stlouisfed.org/series/LES1252881600Q">
+        <z:itemType>webpage</z:itemType>
+        <dcterms:isPartOf>
+           <z:Website></z:Website>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>U.S. Bureau of Labor Statistics</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_29"/>
+        <dc:title>Employed full time: Median usual weekly real earnings: Wage and salary workers: 16 years and over</dc:title>
+        <dcterms:abstract>Graph and download economic data for Employed full time: Median usual weekly real earnings: Wage and salary workers: 16 years and over (LES1252881600Q) from Q1 1979 to Q1 2025 about full-time, salaries, workers, earnings, 16 years +, wages, median, real, employment, and USA.</dcterms:abstract>
+        <dc:date>2025-04-16</dc:date>
+        <z:language>en</z:language>
+        <z:shortTitle>Employed full time</z:shortTitle>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://fred.stlouisfed.org/series/LES1252881600Q</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2025-04-25 22:47:11</dcterms:dateSubmitted>
+    </bib:Document>
+    <z:Attachment rdf:about="#item_29">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/29/LES1252881600Q.html"/>
+        <dc:title>Snapshot</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://fred.stlouisfed.org/series/LES1252881600Q</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2025-04-25 22:47:14</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <bib:Document rdf:about="https://data.worldbank.org">
+        <z:itemType>webpage</z:itemType>
+        <dcterms:isPartOf>
+           <z:Website><dc:title>World Bank Open Data</dc:title></z:Website>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                       <foaf:surname>World Bank</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_31"/>
+        <dc:title>World Bank Open Data</dc:title>
+        <dcterms:abstract>Free and open access to global development data</dcterms:abstract>
+        <z:language>en</z:language>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://data.worldbank.org</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2025-04-26 18:48:14</dcterms:dateSubmitted>
+    </bib:Document>
+    <z:Attachment rdf:about="#item_31">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/31/NY.GDP.PCAP.PP.html"/>
+        <dc:title>Snapshot</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://data.worldbank.org/indicator/NY.GDP.PCAP.PP.CD?locations=US</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2025-04-26 18:48:20</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <bib:Document rdf:about="https://www.census.gov/data/tables/time-series/demo/families/households.html">
+        <z:itemType>webpage</z:itemType>
+        <dcterms:isPartOf>
+           <z:Website><dc:title>Census.gov</dc:title></z:Website>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bureau</foaf:surname>
+                        <foaf:givenName>US Census</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_33"/>
+        <dc:title>Historical Households Tables</dc:title>
+        <dcterms:abstract>These Households tables are on Families and Living Arrangements.</dcterms:abstract>
+        <z:language>en</z:language>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.census.gov/data/tables/time-series/demo/families/households.html</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2025-04-26 18:49:28</dcterms:dateSubmitted>
+        <dc:description>Section: Government</dc:description>
+    </bib:Document>
+    <z:Attachment rdf:about="#item_33">
+        <z:itemType>attachment</z:itemType>
+        <rdf:resource rdf:resource="files/33/households.html"/>
+        <dc:title>Snapshot</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.census.gov/data/tables/time-series/demo/families/households.html</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2025-04-26 18:49:35</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+</rdf:RDF>

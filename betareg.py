@@ -179,19 +179,32 @@ def std_resids(params, X, y):
 def summary(params, names, X, y, I):
     n, p = X.shape
     print("Beta Regression Summary")
-    wald = params[:p] / np.sqrt(np.diag(np.linalg.inv(I[:p,:p])))
-    pval = 1 - stats.chi2(1).cdf(wald ** 2)
+    try:
+        wald = params[:p] / np.sqrt(np.diag(np.linalg.inv(I[:p,:p])))
+        pval = 1 - stats.chi2(1).cdf(wald ** 2)
 
-    names = ["Intercept"] + names
+        names = ["Intercept"] + names
 
-    w1 = max([len(x) + 3 for x in names] + [len("Coefficient") + 3])
-    print(f"{'Coefficient':<{w1}}{'Value':<8}{'Wald':<8}{'P-value':<8}")
-    for i, name in enumerate(names):
-        print(f"{name:<{w1}}{params[i]:<8.2f}{wald[i]:<8.2f}{pval[i]:<8.2f}")
-    print()
-    print(f"Log-Likelihood:   {log_likelihood(params, X, y):.2f}")
+        w1 = max([len(x) + 3 for x in names] + [len("Coefficient") + 3])
+        print(f"{'Coefficient':<{w1}}{'Value':<8}{'Wald':<8}{'P-value':<8}")
+        for i, name in enumerate(names):
+            print(f"{name:<{w1}}{params[i]:<8.2f}{wald[i]:<8.2f}{pval[i]:<8.2f}")
+        print()
+        print(f"Log-Likelihood:   {log_likelihood(params, X, y):.2f}")
 
+    except np.linalg.LinAlgError:
+        names = ["Intercept"] + names
+        print("Information Matrix is Singular. No test results will be printed")
+        w1 = max([len(x) + 3 for x in names] + [len("Coefficient") + 3])
+        print(f"{'Coefficient':<{w1}}{'Value':<8}")
+        for i, name in enumerate(names):
+            print(f"{name:<{w1}}{params[i]:<8.2f}")
+        print()
+        print(f"Log-Likelihood:   {log_likelihood(params, X, y):.2f}")
+    
 def lr_test(params1, params2, X1, X2, y):
     k = np.abs(len(params2) - len(params1))
     stat = 2 * np.abs(log_likelihood(params2, X2, y) - log_likelihood(params1, X1, y))
-    return 1 - stats.chi2(k).cdf(stat)
+    print(f"LR Test: {k} parameter difference:")
+    print(f"X2 Stat: {stat}")
+    print(f"P-Value: {1 - stats.chi2(k).cdf(stat)}")
