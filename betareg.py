@@ -8,7 +8,7 @@ def sigmoid(x):
 def get_mu(X, beta):
     return np.clip(sigmoid(X @ beta), 1e-12, 1 - 1e-12)
 
-def log_likelihood(params, X, y):
+def log_likelihood(params, X, y, lambda_ridge=0.0):
     beta = params[:-1]  # regression coefficients
     phi = params[-1]    # precision parameter
     mu = get_mu(X, beta)
@@ -18,7 +18,9 @@ def log_likelihood(params, X, y):
           np.sum(loggamma((1 - mu) * phi)) + 
           np.sum((mu * phi - 1) * np.log(y)) + 
           np.sum(((1 - mu) * phi - 1) * np.log(1 - y)))
-    return ll
+    
+    penalty = lambda_ridge * np.sum(beta**2)
+    return ll - penalty
 
 def score(params, X, y):
     beta = params[:-1]
@@ -91,7 +93,7 @@ def fisher_info(params, X, y):
     nI[p, p] = d2l_dphi2
     return -1 * nI
 
-def fit_regression(X, y):
+def fit_regression(X, y, lambda_ridge=0.0):
     y = np.clip(y, 1e-12, 1 - 1e-12)
 
     # Support null model
@@ -153,13 +155,13 @@ def fit_regression(X, y):
         lr = 1
 
         propParams = params + lr * grad
-        curr_lik = log_likelihood(propParams, X, y)
+        curr_lik = log_likelihood(propParams, X, y, lambda_ridge)
 
         i = 0
         while (propParams[-1] < 1e-8) or (curr_lik < old_lik + 1e-6):
             lr *= 0.6
             propParams = params + lr * grad
-            curr_lik = log_likelihood(propParams, X, y)
+            curr_lik = log_likelihood(propParams, X, y, lambda_ridge)
             i += 1
             if i > 500:
                 break
