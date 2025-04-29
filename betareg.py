@@ -173,6 +173,90 @@ def fit_regression(X, y, lambda_ridge=0.0):
 
     return params, X, y, fisher_info(params, X, y)
 
+# Update betareg.py: Modify fit_regression for better optimization
+
+def fit_regression_ridge(X, y, lambda_ridge=0.0):
+    y = np.clip(y, 1e-12, 1 - 1e-12)
+
+    # Support null model
+    if X is not None:
+        n, p = X.shape
+        # Add intercept to X
+        X = np.hstack([np.ones((n, 1)), X])
+    else:
+        n = len(y)
+        X = np.ones((n, 1))
+
+    n, p = X.shape
+    
+    # Initial parameter guess
+    beta = np.zeros(p)  # Coefficients for intercept and predictors
+    phi = 1.0           # Precision parameter
+    params = np.concatenate([beta, [phi]])
+    j = 0
+    stopBeta = False
+
+    old_lik = -1e99
+    curr_lik = log_likelihood(params, X, y, lambda_ridge)
+    print(curr_lik)
+    max_iter = 500  # Increase max iterations
+    lr_beta = 1e-1  # Larger initial learning rate for beta
+    lr_phi = 1.0    # Learning rate for phi
+
+    while j < max_iter:
+        j += 1
+        # Check for convergence
+        if abs(curr_lik - old_lik) < 1e-6:
+            break
+        old_lik = curr_lik
+
+        if not stopBeta:
+            # Calculate gradient for beta
+            grad = score(params, X, y)
+            grad_beta = grad[:-1]  # Gradient for beta
+            grad[-1] = 0  # Zero out phi gradient for this step
+
+            # Update beta
+            propParams = params + lr_beta * grad
+            curr_lik = log_likelihood(propParams, X, y, lambda_ridge)
+
+            i = 0
+            while curr_lik < old_lik + 1e-6 and i < 50:  # Reduce step size if needed
+                lr_beta *= 0.5
+                propParams = params + lr_beta * grad
+                curr_lik = log_likelihood(propParams, X, y, lambda_ridge)
+                i += 1
+                if i >= 50:
+                    stopBeta = True
+                    break
+                
+            params = propParams
+
+        # Update phi
+        grad = score(params, X, y)
+        grad[:p] = 0  # Zero out beta gradient for this step
+        grad_phi = grad[-1]
+
+        propParams = params + lr_phi * grad
+        curr_lik = log_likelihood(propParams, X, y, lambda_ridge)
+
+        i = 0
+        while (propParams[-1] < 1e-8 or curr_lik < old_lik + 1e-6) and i < 50:
+            lr_phi *= 0.5
+            propParams = params + lr_phi * grad
+            curr_lik = log_likelihood(propParams, X, y, lambda_ridge)
+            i += 1
+            if i >= 50:
+                break
+
+        params = propParams
+
+        if j % 100 == 0:
+            print(params, curr_lik)
+
+    return params, X, y, fisher_info(params, X, y)
+
+
 def std_resids(params, X, y):
     n, p = X.shape
     mu = get_mu(X, params[:p])
